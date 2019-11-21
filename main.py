@@ -117,7 +117,7 @@ while running:
         for event in pygame.event.get():
             # Close game
             if event.type == pygame.QUIT:
-                levelRunning = False
+                gameStage = 0
                 running = False
 
             # Key Pressed
