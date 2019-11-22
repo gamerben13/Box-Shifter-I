@@ -16,7 +16,9 @@ player = None
 block = None
 walls = []
 goals = []
+holes = []
 boxes = []
+objects = []
 gameStage = 2
 level = 0
 mouseState = 0
@@ -87,6 +89,7 @@ while running:
         boxes = []
         goals = []
         holes = []
+        objects = []
         player = None
         debug = False
         levelX = levelY = 0
@@ -102,10 +105,11 @@ while running:
                     goals.append(goalClass.goal(levelX, levelY))
                 if col == "H":
                     holes.append(holeClass.hole(levelX, levelY))
-
                 levelX += 64
             levelY += 64
             levelX = 0
+        objects.append(walls)
+        objects.append(holes)
     while gameStage == 2:
         score = 0
         pygame.mouse.set_visible(False)
@@ -138,6 +142,8 @@ while running:
                     walls = []
                     boxes = []
                     goals = []
+                    holes = []
+                    objects = []
                     levelX = levelY = 0
                     for row in levels[level]:
                         for col in row:
@@ -149,18 +155,21 @@ while running:
                                 player = playerClass.player(levelX, levelY)
                             if col == "G":
                                 goals.append(goalClass.goal(levelX, levelY))
+                            if col == "H":
+                                holes.append(holeClass.hole(levelX, levelY))
                             levelX += 64
                         levelY += 64
                         levelX = 0
+                    objects.append(walls)
+                    objects.append(holes)
 
                 if event.key == pygame.K_SLASH:
                     gameStage = 3
 
-                player.move(pygame.key.get_pressed(), walls, boxes)
+                player.move(pygame.key.get_pressed(), objects, boxes)
 
         for wall in walls:
             wall.draw(screen)
-
         for goal in goals:
             if goal.boxInGoal(boxes):
                 score += 1
@@ -169,6 +178,7 @@ while running:
             box.draw(screen)
         for hole in holes:
             hole.draw(screen)
+
         if score == len(goals):
             if len(levels) <= level + 1:
                 gameStage = 0
@@ -176,6 +186,7 @@ while running:
             else:
                 level += 1
                 break
+
         player.draw(screen)
         pygame.display.update()
 
