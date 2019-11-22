@@ -6,6 +6,7 @@ import wallClass
 import boxClass
 import goalClass
 import math
+import holeClass
 
 # Initialize Variables #
 running = True
@@ -17,7 +18,7 @@ walls = []
 goals = []
 boxes = []
 gameStage = 2
-level = 2
+level = 0
 mouseState = 0
 
 # Levels #
@@ -25,7 +26,7 @@ levels = [
     [
         "WWWWWWWWWWWWWWWWW",
         "W               W",
-        "W         G     W",
+        "W   H     G     W",
         "W     WWWW      W",
         "W      W        W",
         "WWWWB  W     WWWW",
@@ -85,6 +86,7 @@ while running:
         walls = []
         boxes = []
         goals = []
+        holes = []
         player = None
         debug = False
         levelX = levelY = 0
@@ -98,6 +100,9 @@ while running:
                     player = playerClass.player(levelX, levelY)
                 if col == "G":
                     goals.append(goalClass.goal(levelX, levelY))
+                if col == "H":
+                    holes.append(holeClass.hole(levelX, levelY))
+
                 levelX += 64
             levelY += 64
             levelX = 0
@@ -162,6 +167,8 @@ while running:
             goal.draw(screen)
         for box in boxes:
             box.draw(screen)
+        for hole in holes:
+            hole.draw(screen)
         if score == len(goals):
             if len(levels) <= level + 1:
                 gameStage = 0
