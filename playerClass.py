@@ -9,7 +9,7 @@ class player(object):
         self.hitBox.y = startY
         self.moves = 0
 
-    def move(self, key, objects, boxes):
+    def move(self, key, _objects, boxes):
         xChange = 0
         yChange = 0
         if key[pygame.K_DOWN] or key[pygame.K_s]:
@@ -30,7 +30,7 @@ class player(object):
 
         if xChange != 0 or yChange != 0:
             if self.isPushing(boxes, xChange, yChange):
-                if self.noObjInBox(boxes, objects, xChange, yChange):
+                if self.noObjInBox(boxes, _objects, xChange, yChange):
                     playerHitBox = pygame.Rect(self.hitBox[0] + xChange, self.hitBox[1] + yChange, self.hitBox[2],
                                                self.hitBox[3])
                     for box in boxes:
@@ -42,7 +42,7 @@ class player(object):
                     self.moves += 1
 
             else:
-                if self.canMove(objects, xChange, yChange):
+                if self.canMove(_objects, xChange, yChange):
                     self.hitBox.x += xChange
                     self.hitBox.y += yChange
                     self.moves += 1
@@ -52,7 +52,13 @@ class player(object):
         for x in objects:
             for obj in x:
                 if playerHitBox.colliderect(obj.hitBox):
-                    return False
+                    try:
+                        if obj.fill:
+                            return True
+                        else:
+                            return False
+                    except AttributeError:
+                        return False
         return True
 
     def isPushing(self, boxes, xChange, yChange):
@@ -71,7 +77,14 @@ class player(object):
                 for _x in objects:
                     for obj in _x:
                         if boxHitBox.colliderect(obj.hitBox):
-                            return False
+                            try:
+                                if obj.fill:
+                                    return True
+                                else:
+                                    boxes.remove(box)
+                                    obj.fill = True
+                            except AttributeError:
+                                return False
             for box2 in boxes:
                 if playerHitBox.colliderect(box.hitBox):
                     if boxHitBox.colliderect(box2.hitBox):

@@ -28,7 +28,7 @@ levels = [
     [
         "WWWWWWWWWWWWWWWWW",
         "W               W",
-        "W   H     G     W",
+        "W         G     W",
         "W     WWWW      W",
         "W      W        W",
         "WWWWB  W     WWWW",
@@ -170,14 +170,14 @@ while running:
 
         for wall in walls:
             wall.draw(screen)
+        for hole in holes:
+            hole.draw(screen)
         for goal in goals:
             if goal.boxInGoal(boxes):
                 score += 1
             goal.draw(screen)
         for box in boxes:
             box.draw(screen)
-        for hole in holes:
-            hole.draw(screen)
 
         if score == len(goals):
             if len(levels) <= level + 1:
@@ -195,10 +195,44 @@ while running:
         walls = []
         boxes = []
         goals = []
+        holes = []
         player = None
         testing = False
         debug = True
         block = None
+        levelX = levelY = 0
+        customLevel = [
+            "WWWWWWWWWWWWWWWWW",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "W               W",
+            "WWWWWWWWWWWWWWWWW"
+        ]
+        for row in customLevel:
+            for col in row:
+                if col == "W":
+                    walls.append(wallClass.wall(levelX, levelY))
+                if col == "B":
+                    boxes.append(boxClass.box(levelX, levelY))
+                if col == "P":
+                    player = playerClass.player(levelX, levelY)
+                if col == "G":
+                    goals.append(goalClass.goal(levelX, levelY))
+                if col == "H":
+                    holes.append(holeClass.hole(levelX, levelY))
+                levelX += 64
+            levelY += 64
+            levelX = 0
+        objects.append(walls)
+        objects.append(holes)
+
     while gameStage == 3:
         mousePos = pygame.mouse.get_pos()
         screen.fill((100, 100, 100))
@@ -250,6 +284,9 @@ while running:
                             for box in boxes:
                                 if box.hitBox.x == levelX and box.hitBox.y == levelY:
                                     col = "B"
+                            for hole in holes:
+                                if hole.hitBox.x == levelX and hole.hitBox.y == levelY:
+                                    col = "H"
                             if player is not None:
                                 if player.hitBox.x == levelX and player.hitBox.y == levelY:
                                     col = "P"
@@ -288,12 +325,12 @@ while running:
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 4:
-                    if mouseState - 1 > 5 or mouseState - 1 < 1:
-                        mouseState = 5
+                    if mouseState - 1 > 6 or mouseState - 1 < 1:
+                        mouseState = 6
                     else:
                         mouseState -= 1
                 if event.button == 5:
-                    if mouseState + 1 > 5 or mouseState + 1 < 1:
+                    if mouseState + 1 > 6 or mouseState + 1 < 1:
                         mouseState = 1
                     else:
                         mouseState += 1
@@ -311,6 +348,9 @@ while running:
                         player = playerClass.player((math.ceil(mousePos[0] / 64) - 1) * 64,
                                                     (math.ceil(mousePos[1] / 64) - 1) * 64)
                     if mouseState == 5:
+                        holes.append(holeClass.hole((math.ceil(mousePos[0] / 64) - 1) * 64,
+                                                    (math.ceil(mousePos[1] / 64) - 1) * 64))
+                    if mouseState == 6:
                         for wall in walls:
                             if wall.hitBox.y == (math.ceil(mousePos[1] / 64) - 1) * 64 and wall.hitBox.x == (
                                     math.ceil(mousePos[0] / 64) - 1) * 64:
@@ -335,6 +375,8 @@ while running:
             block = goalClass.goal((math.ceil(mousePos[0] / 64) - 1) * 64, (math.ceil(mousePos[1] / 64) - 1) * 64)
         elif mouseState == 4:
             block = playerClass.player((math.ceil(mousePos[0] / 64) - 1) * 64, (math.ceil(mousePos[1] / 64) - 1) * 64)
+        elif mouseState == 5:
+            block = holeClass.hole((math.ceil(mousePos[0] / 64) - 1) * 64, (math.ceil(mousePos[1] / 64) - 1) * 64)
         pygame.mouse.set_visible(True)
         for wall in walls:
             wall.draw(screen)
@@ -343,9 +385,11 @@ while running:
             goal.draw(screen)
         for box in boxes:
             box.draw(screen)
+        for hole in holes:
+            hole.draw(screen)
         if player is not None:
             player.draw(screen)
-        if mouseState != 5:
+        if mouseState != 6:
             if block is not None:
                 block.draw(screen)
         pygame.display.update()
