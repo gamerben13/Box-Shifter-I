@@ -66,6 +66,20 @@ levels = [
         'W   W       W   W',
         'W   WWW     W P W',
         'WWWWWWWWWWWWWWWWW',
+    ],
+    [
+        'WWWWWWWWWWWWWWWWW',
+        'WWWWW       WP  W',
+        'W      B    WW  W',
+        'W           B   W',
+        'WGWW           WW',
+        'WWW      WWWWWWWW',
+        'W        W    WWW',
+        'W    WW     B WWW',
+        'W  B W     WWWWWW',
+        'W  WWW  B  HGWWWW',
+        'W  HGW     WWWWWW',
+        'WWWWWWWWWWWWWWWWW',
     ]
 ]
 
