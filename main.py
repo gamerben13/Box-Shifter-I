@@ -19,7 +19,8 @@ goals = []
 holes = []
 boxes = []
 objects = []
-gameStage = 2
+startMenuButtons = ["Continue", "New Game", "Settings", "Quit"]
+gameStage = 1
 level = 0
 mouseState = 0
 
@@ -89,6 +90,7 @@ os.environ["SDL_VIDEO_CENTERED"] = "1"
 screen = pygame.display.set_mode((1088, 768))
 pygame.display.set_caption("Box Shifter I")
 pygame.display.set_icon(pygame.image.load("game_art/icon.png"))
+font = pygame.font.SysFont("ariel", 35)
 
 while running:
     while gameStage == 1:
@@ -97,6 +99,13 @@ while running:
             if event.type == pygame.QUIT:
                 gameStage = 0
                 running = False
+        menuY = math.ceil(384/(len(startMenuButtons)/2))
+        for button in startMenuButtons:
+            text = font.render(button, True, (255, 0, 0))
+            screen.blit(text,
+                        (544 - text.get_width() // 2, (menuY - text.get_height() // 2)))
+            menuY += 64
+        pygame.display.update()
 
     if gameStage == 2:
         walls = []
