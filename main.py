@@ -13,7 +13,6 @@ import wallClass
 # Initialize Variables #
 running = True
 debug = False
-testing = False
 player = None
 block = None
 walls = []
@@ -29,59 +28,101 @@ mouseState = 0
 # Levels #
 levels = [
     [
-        "WWWWWWWWWWWWWWWWW",
-        "W               W",
-        "W         G     W",
-        "W     WWWW      W",
-        "W      W        W",
-        "WWWWB  W     WWWW",
-        "W      W        W",
-        "W               W",
-        "WWWW    B   G   W",
-        "W        W      W",
-        "W      P W      W",
-        "WWWWWWWWWWWWWWWWW"
-    ],
-    [
-        "WWWWWWWWWWWWWWWWW",
-        "W WWWW          W",
-        "W    G    G     W",
-        "W     WWWW      W",
-        "W        W      W",
-        "W   BB  WWWW WWWW",
-        "W        W      W",
-        "W  P     W      W",
-        "W  WWW      G   W",
-        "W   B    W      W",
-        "W        W      W",
-        "WWWWWWWWWWWWWWWWW"
+        'WWWWWWWWWWWWWWWWW',
+        'WWW           WWW',
+        'WW             WW',
+        'W               W',
+        'W               W',
+        'W  P    B    G  W',
+        'W               W',
+        'W               W',
+        'W               W',
+        'WW             WW',
+        'WWW           WWW',
+        'WWWWWWWWWWWWWWWWW',
     ],
     [
         'WWWWWWWWWWWWWWWWW',
-        'WWWWGW          W',
-        'WWWWG  B W    G W',
-        'WWWW WWWWW      W',
+        'W    W    B   GGW',
+        'W P  W          W',
+        'W    WWWWW   WWWW',
         'W       WW      W',
-        'W    W  WWWWWW  W',
-        'W    W  WW  W   W',
-        'WWWWWW WWW  W   W',
-        'W B         B   W',
-        'W   W       W   W',
-        'W   WWW     W P W',
+        'W       WWWW    W',
+        'W          W    W',
+        'WWWWWW          W',
+        'W    W          W',
+        'W B      W      W',
+        'W        W      W',
         'WWWWWWWWWWWWWWWWW',
     ],
     [
         'WWWWWWWWWWWWWWWWW',
-        'WWWWW       WP  W',
-        'W      B    WW  W',
-        'W           B   W',
-        'WGWW           WW',
-        'WWW      WWWWWWWW',
-        'W        W    WWW',
-        'W    WW     B WWW',
-        'W  B W     WWWWWW',
-        'W  WWW  B  HGWWWW',
-        'W  HGW     WWWWWW',
+        'WWWW  WWW      WW',
+        'WW    WWW  B   WW',
+        'W     WWW    W GW',
+        'W P    W     W  W',
+        'W       B    W  W',
+        'W     B   WWWWWWW',
+        'W      W     WWWW',
+        'W     WWWW W WWWW',
+        'W     WWWWGWWWWWW',
+        'W  G  WWWWWWWWWWW',
+        'WWWWWWWWWWWWWWWWW',
+    ],
+    [
+        'WWWWWWWWWWWWWWWWW',
+        'W       W       W',
+        'W      WWW      W',
+        'W       P       W',
+        'W    W GWG W    W',
+        'W WWWWWWWWWWWWW W',
+        'W    W GWG W    W',
+        'W               W',
+        'W      WWW      W',
+        'W     B W B     W',
+        'W   B   W   B   W',
+        'WWWWWWWWWWWWWWWWW',
+    ],
+    [
+        'WWWWWWWWWWWWWWWWW',
+        'W     GW        W',
+        'WWW  WWW P      W',
+        'W      WWWWW    W',
+        'W      W   WW  WW',
+        'W      G   W    W',
+        'W      W   WB   W',
+        'WWWBWWWW        W',
+        'W      B        W',
+        'W      WW  W  B W',
+        'WWWWWWWWG  W    W',
+        'WWWWWWWWWWWWWWWWW',
+    ],
+    [
+        'WWWWWWWWWWWWWWWWW',
+        'W   WWWWWWWWW   W',
+        'W      WWW  B   W',
+        'W       W       W',
+        'W       W       W',
+        'W G     H B   P W',
+        'W G     H B     W',
+        'W       W       W',
+        'W       W       W',
+        'W      WWW  B   W',
+        'W   WWWWWWWWW   W',
+        'WWWWWWWWWWWWWWWWW',
+    ],
+    [
+        'WWWWWWWWWWWWWWWWW',
+        'W          G B  W',
+        'W  WWWW    WWW WW',
+        'W  W     W     WW',
+        'W  W     W     WW',
+        'W BW  W  W  W WWW',
+        'W  W  W  W  W WWW',
+        'WWWW  W  WWWWHWWW',
+        'W     W   W  P  W',
+        'W GG  W B W B   W',
+        'W     W   W     W',
         'WWWWWWWWWWWWWWWWW',
     ]
 ]
@@ -259,7 +300,6 @@ while running:
         goals = []
         holes = []
         player = None
-        testing = False
         debug = True
         block = None
         levelX = levelY = 0
@@ -315,7 +355,6 @@ while running:
                 if event.key == pygame.K_SLASH:
                     gameStage = 2
                 if event.key == pygame.K_p:
-                    print("P Pushed")
                     customLevel = [
                         "                 ",
                         "                 ",
@@ -370,19 +409,11 @@ while running:
                         i += 1
                     print("]")
 
-                if event.key == pygame.K_TAB:
-                    testing = True
-                    debug = False
-
                 if event.key == pygame.K_F3:
                     if debug:
                         debug = False
                     else:
                         debug = True
-
-                if testing:
-                    if player is not None:
-                        player.move(pygame.key.get_pressed(), walls, boxes)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 4:
