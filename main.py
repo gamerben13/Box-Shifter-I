@@ -1,12 +1,14 @@
 # Import Library's
-import pygame
+import math
 import os
-import playerClass
-import wallClass
+
+import pygame
+
 import boxClass
 import goalClass
-import math
 import holeClass
+import playerClass
+import wallClass
 
 # Initialize Variables #
 running = True
@@ -91,17 +93,56 @@ screen = pygame.display.set_mode((1088, 768))
 pygame.display.set_caption("Box Shifter I")
 pygame.display.set_icon(pygame.image.load("game_art/icon.png"))
 font = pygame.font.SysFont("ariel", 35)
+pygame.mouse.set_visible(False)
+menuButton = 0
+color = (255, 0, 0)
 
 while running:
+    if gameStage == 1:
+        walls = []
+        boxes = []
+        goals = []
+        holes = []
+        objects = []
+        player = None
+        debug = False
     while gameStage == 1:
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             # Close game
             if event.type == pygame.QUIT:
                 gameStage = 0
                 running = False
-        menuY = math.ceil(384/(len(startMenuButtons)/2))
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    if menuButton + 1 > len(startMenuButtons) - 1:
+                        menuButton = 0
+                    else:
+                        menuButton += 1
+
+                if event.key == pygame.K_w:
+                    if menuButton - 1 < 0:
+                        menuButton = 3
+                    else:
+                        menuButton -= 1
+                if event.key == pygame.K_RETURN:
+                    if menuButton == 0:
+                        print("Continue Coming Soon...")
+                    elif menuButton == 1:
+                        gameStage = 2
+                    elif menuButton == 2:
+                        print("Settings Coming Soon...")
+                    elif menuButton == 3:
+                        gameStage = 0
+                        running = False
+
+        menuY = math.ceil(384 / (len(startMenuButtons) / 2))
         for button in startMenuButtons:
-            text = font.render(button, True, (255, 0, 0))
+            if button == startMenuButtons[menuButton]:
+                color = (255, 255, 255)
+            else:
+                color = (255, 0, 0)
+            text = font.render(button, True, color)
             screen.blit(text,
                         (544 - text.get_width() // 2, (menuY - text.get_height() // 2)))
             menuY += 64
@@ -135,7 +176,6 @@ while running:
         objects.append(holes)
     while gameStage == 2:
         score = 0
-        pygame.mouse.set_visible(False)
         screen.fill((200, 200, 200))
         # Get events
         # Draw debug grid
@@ -160,7 +200,6 @@ while running:
                         debug = False
                     else:
                         debug = True
-
                 if event.key == pygame.K_r:
                     walls = []
                     boxes = []
@@ -204,8 +243,8 @@ while running:
 
         if score == len(goals):
             if len(levels) <= level + 1:
-                gameStage = 0
-                running = False
+                gameStage = 1
+                walls = []
             else:
                 level += 1
                 break
@@ -255,7 +294,6 @@ while running:
             levelX = 0
         objects.append(walls)
         objects.append(holes)
-
     while gameStage == 3:
         mousePos = pygame.mouse.get_pos()
         screen.fill((100, 100, 100))
