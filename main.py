@@ -3,6 +3,7 @@ import math
 import os
 
 import pygame
+import yaml
 
 import boxClass
 import goalClass
@@ -22,8 +23,11 @@ boxes = []
 objects = []
 startMenuButtons = ["Continue", "New Game", "Settings", "Quit"]
 gameStage = 1
-level = 0
 mouseState = 0
+level = 0
+
+with open(r"save.yml") as file:
+    saveData = yaml.load(file, Loader=yaml.FullLoader)
 
 # Levels #
 levels = [
@@ -168,9 +172,11 @@ while running:
                         menuButton -= 1
                 if event.key == pygame.K_RETURN:
                     if menuButton == 0:
-                        print("Continue Coming Soon...")
+                        level = saveData["level"]
+                        gameStage = 2
                     elif menuButton == 1:
                         gameStage = 2
+                        level = 0
                     elif menuButton == 2:
                         print("Settings Coming Soon...")
                     elif menuButton == 3:
