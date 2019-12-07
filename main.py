@@ -10,6 +10,7 @@ import goalClass
 import holeClass
 import playerClass
 import wallClass
+import telepadsClass
 
 # Initialize Variables #
 running = True
@@ -20,6 +21,7 @@ walls = []
 goals = []
 holes = []
 boxes = []
+telepads = []
 objects = []
 startMenuButtons = ["Continue", "New Game", "Settings", "Quit"]
 gameStage = 1
@@ -36,9 +38,9 @@ levels = [
         'WWW           WWW',
         'WW             WW',
         'W               W',
-        'W               W',
+        'W      T        W',
         'W  P    B    G  W',
-        'W               W',
+        'W      T        W',
         'W               W',
         'W               W',
         'WW             WW',
@@ -148,6 +150,7 @@ while running:
         boxes = []
         goals = []
         holes = []
+        telepads = []
         objects = []
         player = None
         debug = False
@@ -172,7 +175,16 @@ while running:
                         menuButton -= 1
                 if event.key == pygame.K_RETURN:
                     if menuButton == 0:
-                        level = saveData["level"]
+                        try:
+                            try:
+                                if saveData["level"] > len(levels):
+                                    level = 0
+                                else:
+                                    level = saveData["level"]
+                            except KeyError:
+                                level = 0
+                        except TypeError:
+                            level = 0
                         gameStage = 2
                     elif menuButton == 1:
                         gameStage = 2
@@ -200,6 +212,7 @@ while running:
         boxes = []
         goals = []
         holes = []
+        telepads = []
         objects = []
         player = None
         debug = False
@@ -214,6 +227,8 @@ while running:
                     player = playerClass.player(levelX, levelY)
                 if col == "G":
                     goals.append(goalClass.goal(levelX, levelY))
+                if col == "T":
+                    telepads.append(telepadsClass.telepad(levelX, levelY))
                 if col == "H":
                     holes.append(holeClass.hole(levelX, levelY))
                 levelX += 64
@@ -275,7 +290,7 @@ while running:
                 if event.key == pygame.K_SLASH:
                     gameStage = 3
 
-                player.move(pygame.key.get_pressed(), objects, boxes)
+                player.move(pygame.key.get_pressed(), objects, boxes, telepads)
 
         for wall in walls:
             wall.draw(screen)
@@ -285,6 +300,8 @@ while running:
             if goal.boxInGoal(boxes):
                 score += 1
             goal.draw(screen)
+        for telepad in telepads:
+            telepad.draw(screen)
         for box in boxes:
             box.draw(screen)
 
@@ -294,6 +311,8 @@ while running:
                 walls = []
             else:
                 level += 1
+                with open(r'save.yml', 'w') as file:
+                    documents = yaml.dump({"level": level}, file)
                 break
 
         player.draw(screen)
@@ -305,6 +324,7 @@ while running:
         boxes = []
         goals = []
         holes = []
+        telepads = []
         player = None
         debug = True
         block = None

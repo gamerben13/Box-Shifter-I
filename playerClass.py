@@ -1,15 +1,20 @@
 import pygame
+import datetime
 
 
 class player(object):
     def __init__(self, startX, startY):
-        self.image = pygame.image.load("game_art/player.png")
+        if int(datetime.date.today().strftime('%m')) == 12:
+            if int(datetime.date.today().strftime('%d')) <= 25:
+                self.image = pygame.image.load("game_art/player_christmas.png")
+        else:
+            self.image = pygame.image.load("game_art/player.png")
         self.hitBox = self.image.get_rect()
         self.hitBox.x = startX
         self.hitBox.y = startY
         self.moves = 0
 
-    def move(self, key, _objects, boxes):
+    def move(self, key, _objects, boxes, telepads):
         xChange = 0
         yChange = 0
         if key[pygame.K_DOWN] or key[pygame.K_s]:
@@ -43,9 +48,28 @@ class player(object):
 
             else:
                 if self.canMove(_objects, xChange, yChange):
-                    self.hitBox.x += xChange
-                    self.hitBox.y += yChange
-                    self.moves += 1
+                    if self.teleport(telepads, xChange, yChange):
+                        playerHitBox = pygame.Rect(self.hitBox[0] + xChange, self.hitBox[1] + yChange, self.hitBox[2],
+                                                   self.hitBox[3])
+                        for telepad in telepads:
+                            temp_ = None
+                            if playerHitBox.colliderect(telepad.hitBox):
+                                temp_ = telepad.hitBox
+                            if temp_ is not None:
+                                if telepad.hitBox != temp_:
+                                    self.hitBox.x = telepad.hitBox.x
+                                    self.hitBox.y = telepad.hitBox.y
+                    else:
+                        self.hitBox.x += xChange
+                        self.hitBox.y += yChange
+                        self.moves += 1
+
+    def teleport(self, telepads, xChange, yChange):
+        playerHitBox = pygame.Rect(self.hitBox[0] + xChange, self.hitBox[1] + yChange, self.hitBox[2], self.hitBox[3])
+        for telepad in telepads:
+            if playerHitBox.colliderect(telepad.hitBox):
+                return True
+        return False
 
     def canMove(self, objects, xChange, yChange):
         playerHitBox = pygame.Rect(self.hitBox[0] + xChange, self.hitBox[1] + yChange, self.hitBox[2], self.hitBox[3])
