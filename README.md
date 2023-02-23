@@ -1,6 +1,3 @@
-# Box-Shifter-I
-
-The code includes a few levels and when you enter the "debug-mode" in game you can create levels that are printed in the console as nested list that represents the maps. This taught me the very basics of using classes and using a framework like pygame. This game also remembers everytime you complete a level it saves it to a file.
 <body>
 <h1>Box Shifter I</h1>
 <p>
