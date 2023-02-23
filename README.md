@@ -9,15 +9,10 @@ This project taught me so much about how basic 2D games function. I covered game
 </p>
 
 <h2>Showcase</h2>
-<h3>Menu</h3>
-<img src="https://user-images.githubusercontent.com/43081670/220796566-44f559ba-eea3-4add-a20e-135c68306db2.png" width="510"/>
-
-<h3>Gameplay</h3>
-<h5>Pushing Boxes</h5>
-<p>The player can push a box around and needs to cover all the goal points. <h6>Indicated by the green spots</h6>
-<img src="https://user-images.githubusercontent.com/43081670/220796756-10ef4d46-ab09-41e7-825e-61c7a655e386.gif" width="510" />
-
-<h5>Holes</h5>
-<p>The player cannot cross over a hole but you can push boxes into it to fill the hole
-<img src="https://user-images.githubusercontent.com/43081670/220796794-3f10ec0d-39a4-4a0a-b497-20b211ca38d0.gif" width="510"/>
+<h3>Game Screen</h3>
+<img src="https://user-images.githubusercontent.com/43081670/220809636-b0e69630-facc-4be0-a622-6382d92ea63b.png" width="510"/>
+<h3>Random Planet</h3>
+<img src="https://user-images.githubusercontent.com/43081670/220809805-e866e616-e593-4f9e-a53e-0ba57182c9e1.png" width="510"/>
+<h3>Postcard Window</h3>
+<img src="https://user-images.githubusercontent.com/43081670/220809831-e8f5c329-e90a-4d84-9edb-a12bc4752652.png" width="510"/>
 </body>
